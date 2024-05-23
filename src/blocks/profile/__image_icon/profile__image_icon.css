@@ -1,0 +1,8 @@
+.profile__image_icon {
+  display: block;
+  background-image: url(/src/images/pen.svg);
+  background-position: center;
+  width: 26px;
+  height: 26px;
+  background-size: contain;
+}
