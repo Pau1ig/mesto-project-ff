@@ -24,16 +24,5 @@ function handleEscape(evt) {
   }
 }
 
-//Механика закрытия модального окна по клику на фоне и X
 
-popups.forEach((popup) => {
-  popup.addEventListener('mousedown', (evt) => {
-      if (evt.target.classList.contains('popup_is-opened')) {
-          closePopup(popup)
-      }
-      if (evt.target.classList.contains('popup__close')) {
-        closePopup(popup)
-      }
-  })
-});
 

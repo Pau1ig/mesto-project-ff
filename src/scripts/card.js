@@ -1,77 +1,90 @@
-import { openPopup } from "./modal";
-import { delCardServer, toLike, toDislike } from "./api.js";
+
+import { delCardRequest, toLikeRequest, toDislikeRequest } from "./api.js";
 
 const cardTemplate = document.querySelector('#card-template').content;
-const popupTypeImage = document.querySelector('.popup_type_image');
-const imageCaptionPopup = document.querySelector('.popup__caption');
-const popupImage = popupTypeImage.querySelector('.popup__image');
-const placesList = document.querySelector('.places__list');
 
 // Функция создания карточки
 
-export function createCard(name, link, likes, isThisCardMy, idCard, myLike) {
+export function createCard(name, link, cardLikes, idCard, userId, cardOwnerId, zoom) {
   const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
   const delBtn = cardElement.querySelector('.card__delete-button');
   const cardLikeBtn = cardElement.querySelector('.card__like-button');
   const likeCount = cardElement.querySelector('.card__like_count');
-  const cardId = cardElement.querySelector('.card__id');
-  cardId.textContent = idCard;
 
   cardElement.querySelector('.card__title').textContent = name;
   cardImage.src = link;
   cardImage.alt = name;
-  likeCount.textContent = likes.length;
+  likeCount.textContent = cardLikes.length;
 
-  cardImage.addEventListener('click', () => {
-    popupImage.src = link;
-    popupImage.alt = name;
-    imageCaptionPopup.textContent = name;
-    openPopup(popupTypeImage);
-  });
+  zoom(name, link, cardImage);
 
-  if(myLike) {
+  if(hasMyLike(userId, cardLikes)) {
     cardLikeBtn.classList.add('card__like-button_is-active');
   };
 
-  if(isThisCardMy) {
-    delBtn.addEventListener('click', delCardServer);
+  if(cardOwnerId === userId) {
+    delBtn.addEventListener('click', event => delCard(event, idCard));
   } else {
     delBtn.style["display"] = "none";
-    delBtn.removeEventListener('click', delCardServer);
+    delBtn.removeEventListener('click', event => delCard(event, idCard));
   };
 
-  // delBtn.addEventListener('click', delCardServer);
-  cardLikeBtn.addEventListener('click', toggleLikeButtonState);
+  cardLikeBtn.addEventListener('click', event => toggleLikeButtonState(event, idCard));
   
   return cardElement;
 };
 
-// Рендеринг карточки
+// Есть ли лайк пользователя на карточке
 
-export function renderCard(element, method, verify, myLike) {
-  const card = createCard(element.name, element.link, element.likes, verify, element._id, myLike);
-  placesList[ method ](card);
+function hasMyLike(userId, cardLikes) {
+  if(cardLikes.length > 0) {
+    return cardLikes.some((like) => {
+      return like._id === userId
+    })
+  } else {
+    return false
+  }
 };
 
 // Функция удаления карточки со страницы
 
-export function delCard(evt) {
-  evt.target.closest('.places__item').remove(); 
+export function delCard(evt, idCard) {
+  delCardRequest(idCard)
+  .then(() => {
+    evt.target.closest('.places__item').remove();
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+  
 };
 
-// Переключение визуальных состояний кнопки лайка
+// Переключение визуальных состояний кнопки лайка и счетчика
 
-export function like(evt) {
+export function toggleLikeCount(res, evt) {
+  evt.target.closest('.places__item').querySelector('.card__like_count').textContent = res.likes.length;
   evt.target.classList.toggle('card__like-button_is-active');
 }
 
-// Состояние кнопки лайк
+// Поставить/убрать лайк
 
-export function toggleLikeButtonState(evt) {
+export function toggleLikeButtonState(evt, idCardValue) {
   if(evt.target.classList.contains('card__like-button_is-active')) {
-    toDislike(evt)
+    toDislikeRequest(idCardValue)
+      .then((res) => {
+        toggleLikeCount(res, evt)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   } else {
-    toLike(evt)
+    toLikeRequest(idCardValue)
+      .then((res) => {
+        toggleLikeCount(res, evt)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 };
