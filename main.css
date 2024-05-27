@@ -28,7 +28,6 @@
 .card__title{font-size:24px;line-height:29px;margin:0;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card__like_container{display:grid;font-size:13px;gap:3px;grid-template-columns:auto;grid-template-rows:auto auto;justify-items:center};
 .card__like_count{display:block}
-.card__id{display:none}
 .card{border-radius:10px;font-family:Inter,Arial,sans-serif;overflow:hidden;position:relative}
 .popup__content{background-color:#fff;border-radius:10px;box-sizing:border-box;max-width:430px;min-height:250px;padding:34px 36px;position:relative;width:100%}@media screen and (max-width:568px){.popup__content{margin-top:40px;max-width:calc(100% - 80px);padding:30px 20px;width:100%}}
 .popup__content_content_image{background:transparent;background-size:cover;border-radius:0;display:flex;height:auto;max-height:75vh;max-width:75vw;padding:0;width:auto}
@@ -44,4 +43,5 @@
 .popup{align-items:center;background-color:rgba(0,0,0,.5);bottom:0;display:none;font-family:Inter,Arial,sans-serif;justify-content:center;left:0;position:fixed;right:0;top:0;z-index:10}
 .popup_is-animated{display:flex;opacity:0;pointer-events:none;transition:visibility 0s .6s,opacity .6s;-webkit-user-select:none;-moz-user-select:none;user-select:none;visibility:hidden}
 .popup_is-opened{display:flex;opacity:1;pointer-events:all;transition:visibility 0s,opacity .6s;visibility:visible}
+.popup__button_inactive{background-color:transparent;border:1px solid rgba(0,0,0,.2);color:rgba(0,0,0,.2);cursor:not-allowed}
 
