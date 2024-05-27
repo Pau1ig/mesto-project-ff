@@ -58,9 +58,9 @@ const renderAllData = () => {
   const promises = [getUserData(), getInitialCards()];
 
   Promise.all(promises)
-    .then((res) => {
-      const userData = res[0];
-      const cardData = res[1];
+    .then(([userData, cardData]) => {
+      // const userData = res[0];
+      // const cardData = res[1];
 
       profileName.textContent = userData.name;
       profileDescription.textContent = userData.about;

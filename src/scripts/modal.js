@@ -1,6 +1,4 @@
 
-const popups = document.querySelectorAll('.popup');
-
 // Функция отрытия попапа
 
 export function openPopup(popup) {
